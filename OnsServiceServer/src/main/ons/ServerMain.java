@@ -38,7 +38,6 @@ import org.json.simple.JSONValue;
 public class ServerMain{
 	private final static Logger logger = LoggerFactory.getLogger(ServerMain.class);
 
-	
 	public static void main(String[] args) throws IOException{
 		ServerSocket serverSck = null;
 		Socket clientSck = null;
