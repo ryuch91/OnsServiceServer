@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="lib/xercesImpl-2.9.1.jar"/>
 	<classpathentry kind="lib" path="lib/xerces-2.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/tdt-1.0.0-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
