@@ -15,6 +15,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -26,49 +27,72 @@ import java.net.Socket;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.DataInputStream;
+import java.io.DataOutput;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.net.UnknownHostException;
+import java.net.SocketException;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import main.ons.JsonBuilder;
+
 public class ServerMain{
 	private final static Logger logger = LoggerFactory.getLogger(ServerMain.class);
-
+	
+	private final static int PORT_NUM = 7777;
+	private static JsonBuilder jsonObject=null;
+	private static ServerSocket serverSocket = null;
+	private PrintWriter pw_sock = null;
+	
+	public ServerMain(){
+		jsonObject = new JsonBuilder();
+	}
+	
 	public static void main(String[] args) throws IOException{
-		ServerSocket serverSck = null;
-		Socket clientSck = null;
-		PrintWriter out = null;
-		BufferedReader in = null;
-		
-		
-		serverSck = new ServerSocket(7777);
-		
 		try{
-			logger.info("Server is listening...");
-			clientSck = serverSck.accept();
-			logger.info("Client is connected.");
-			out = new PrintWriter(clientSck.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(clientSck.getInputStream()));
-			while(true){
-				String inputLine = null;
-				inputLine = in.readLine();
-				logger.info("String from Client : {}",inputLine);
-				if(inputLine.equals("quit"))
-					break;
-			}
-			out.close();
-			in.close();
-			clientSck.close();
-			serverSck.close();
-			
-		}catch(Exception e){
+			serverSocket = new ServerSocket(PORT_NUM);
+			logger.info("Server is ready...");
+		}catch(IOException e){
 			e.printStackTrace();
 		}
 		
+		while(true){
+			try{
+				logger.info("Server is listening...");
+				Socket socket = serverSocket.accept();
+				logger.info("{} send connection request", socket.getInetAddress());
+				
+				InputStream in = socket.getInputStream();
+				DataInputStream din = new DataInputStream(in);
+				OutputStream out = socket.getOutputStream();
+				DataOutputStream dout = new DataOutputStream(out);
+				
+				String sgtinCode = din.readUTF();
+				logger.info("IP: {} sent sgtin string : {}",socket.getInetAddress(),sgtinCode);
+												
+				//String strJson = jsonObject.jsonToString();
+				String strJson = "Hello!";
+				
+				//<-- here, NAPTR lookup code needs
+				try{
+					dout.writeUTF(strJson);
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+				
+				din.close();
+				dout.close();
+				socket.close();
+				logger.info("Connection from {} is closed...",socket.getInetAddress());
+				
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+		}
 	}
-	
 }
