@@ -22,6 +22,9 @@ public class NaptrLookup {
 	private static final String[] LOCAL_SEARCH_PATH = { "127.0.1.1" };
 	private static String DN;
 	
+	public NaptrLookup(){
+	}
+	
 	public NaptrLookup(String resolver_addr, int resolver_port){
 		RESOLVER_ADDRESS = resolver_addr;
 		RESOLVER_PORT = resolver_port;

@@ -25,14 +25,18 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import main.ons.JsonBuilder;
 
+import main.ons.NaptrLookup;
+
 public class ServerMain{
 	private final static Logger logger = LoggerFactory.getLogger(ServerMain.class);
-	
 	private final static int PORT_NUM = 7777;
+	private static NaptrLookup naptrLookup=null;
 	private static JsonBuilder jsonObject=null;
+	private static String domainName=null;
 	
 	public ServerMain(){
 		jsonObject = new JsonBuilder();
+		naptrLookup = new NaptrLookup();
 	}
 	
 	public static void main(String[] args) throws IOException{
@@ -57,7 +61,8 @@ public class ServerMain{
 						String str = in.readLine();
 						logger.info("Server : Received '{}' from client",str);
 						
-						//<-- here, NAPTR lookup code needs
+						domainName = "0.4.2.0.0.0.1.0.0.0.0.8.8.gtin.gs1.id.onsepc.kr";
+						String lookupResult = naptrLookup.getResource(domainName);
 						
 						//<-- here, Translate it with JSON and send JSON value to client
 						
@@ -68,7 +73,10 @@ public class ServerMain{
 						//String strJson = jsonObject.jsonToString();
 						
 						PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())),true);
-						out.println("Server received "+str);
+						out.println("Server received "+str+ ", Lookup Result :"+lookupResult);
+					}catch(NullPointerException e){
+						logger.info("Lookup failed");
+						e.printStackTrace();
 					}catch(Exception e){
 						logger.info("Stream open error");
 						e.printStackTrace();
