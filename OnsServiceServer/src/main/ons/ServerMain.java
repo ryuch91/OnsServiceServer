@@ -32,7 +32,8 @@ public class ServerMain{
 	private final static int PORT_NUM = 7777;
 	private static NaptrLookup naptrLookup=null;
 	private static JsonBuilder jsonObject=null;
-	private static String domainName=null;
+	private static String domainName;
+	private static String lookupResult;
 	
 	public ServerMain(){
 		jsonObject = new JsonBuilder();
@@ -61,8 +62,16 @@ public class ServerMain{
 						String str = in.readLine();
 						logger.info("Server : Received '{}' from client",str);
 						
-						domainName = "0.4.2.0.0.0.1.0.0.0.0.8.8.gtin.gs1.id.onsepc.kr";
-						String lookupResult = naptrLookup.getResource(domainName);
+						logger.info("Server starts to lookup...");
+						try{
+							domainName = "0.4.2.0.0.0.1.0.0.0.0.8.8.gtin.gs1.id.onsepc.kr";
+							lookupResult = naptrLookup.getResource(domainName);
+							logger.info("Lookup result is : {}",lookupResult);
+						}catch(NullPointerException e){
+							logger.info("Lookup failed");
+							e.printStackTrace();
+						}
+						
 						
 						//<-- here, Translate it with JSON and send JSON value to client
 						
@@ -74,9 +83,6 @@ public class ServerMain{
 						
 						PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())),true);
 						out.println("Server received "+str+ ", Lookup Result :"+lookupResult);
-					}catch(NullPointerException e){
-						logger.info("Lookup failed");
-						e.printStackTrace();
 					}catch(Exception e){
 						logger.info("Stream open error");
 						e.printStackTrace();
