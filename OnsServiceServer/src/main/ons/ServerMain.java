@@ -30,7 +30,7 @@ import main.ons.NaptrLookup;
 public class ServerMain{
 	private final static Logger logger = LoggerFactory.getLogger(ServerMain.class);
 	private final static int PORT_NUM = 7777;
-	private static NaptrLookup naptrLookup=null;
+	private static NaptrLookup naptrLookup;
 	private static JsonBuilder jsonObject=null;
 	private static String domainName;
 	private static String lookupResult;
@@ -71,8 +71,6 @@ public class ServerMain{
 							logger.info("Lookup failed");
 							e.printStackTrace();
 						}
-						
-						
 						//<-- here, Translate it with JSON and send JSON value to client
 						
 						//<JSON USAGE>	
@@ -82,7 +80,8 @@ public class ServerMain{
 						//String strJson = jsonObject.jsonToString();
 						
 						PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())),true);
-						out.println("Server received "+str+ ", Lookup Result :"+lookupResult);
+						out.println("Server received "+str);
+						out.println("Lookup Result :"+lookupResult);
 					}catch(Exception e){
 						logger.info("Stream open error");
 						e.printStackTrace();
