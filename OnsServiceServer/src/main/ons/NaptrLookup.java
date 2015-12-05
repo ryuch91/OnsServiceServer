@@ -23,6 +23,8 @@ public class NaptrLookup {
 	private static String DN;
 	
 	public NaptrLookup(){
+		RESOLVER_ADDRESS = "143.248.55.143";
+		RESOLVER_PORT = 53;
 	}
 	
 	public NaptrLookup(String resolver_addr, int resolver_port){
