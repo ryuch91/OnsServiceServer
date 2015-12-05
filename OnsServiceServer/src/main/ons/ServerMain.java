@@ -30,14 +30,8 @@ import main.ons.NaptrLookup;
 public class ServerMain{
 	private final static Logger logger = LoggerFactory.getLogger(ServerMain.class);
 	private final static int PORT_NUM = 7777;
-	private static NaptrLookup naptrLookup;
-	private static JsonBuilder jsonObject=null;
-	private static String domainName;
-	private static String lookupResult;
-	
+
 	public ServerMain(){
-		jsonObject = new JsonBuilder();
-		naptrLookup = new NaptrLookup();
 	}
 	
 	public static void main(String[] args) throws IOException{
@@ -47,11 +41,17 @@ public class ServerMain{
 	}
 	
 	private static class TCPServer implements Runnable{
+		private String domainName=null;
 		private ServerSocket serverSocket;
+		private NaptrLookup naptrLookup;
+		private JsonBuilder jsonObject=null;
+		private String lookupResult;
 		public void run(){
 			try{
 				logger.info("Server: Openning...");
 				serverSocket = new ServerSocket(PORT_NUM);
+				naptrLookup = new NaptrLookup();
+				jsonObject = new JsonBuilder();
 				
 				while(true){
 					Socket client = serverSocket.accept();
