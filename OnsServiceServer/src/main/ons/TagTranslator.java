@@ -134,25 +134,27 @@ public class TagTranslator extends TestCase{
 		String itemref = null;
 		String companyPrefix = null;
 		String gs1Code = null;
+		String in = null;
 		int count = 0;
 		
 		StringTokenizer str = new StringTokenizer(onsHostname, ".");
 		
 		while(str.hasMoreTokens()){
+			in = str.nextToken();
 			switch(count){
 			case 0:
-				String first = str.nextToken().substring(0,1);
-				String last = str.nextToken().substring(1,str.nextToken().length());
+				String first = in.substring(0,1);
+				String last = in.substring(1,in.length());
 				itemref = first + reverseString(last);
 				break;
 			case 1:
-				companyPrefix = reverseString(str.nextToken());
+				companyPrefix = reverseString(in);
 				break;
 			case 2:
-				if(str.nextToken().equals("sgtin")){
+				if(in.equals("sgtin")){
 					gs1Code = "gtin.gs1.id.onsepc.kr";
 				}else{
-					gs1Code = str.nextToken() + ".gs1.id.onsepc.kr";
+					gs1Code = in + ".gs1.id.onsepc.kr";
 				}
 				break;
 			default:
