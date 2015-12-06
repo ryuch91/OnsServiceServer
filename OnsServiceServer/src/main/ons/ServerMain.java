@@ -74,20 +74,23 @@ public class ServerMain{
 							epcTagURI = tagTranslator.elementStringToEpcTagURI(str);
 							onsHostName = tagTranslator.epcTagUriToOnsHostname(epcTagURI);
 							logger.info("Translation success: {} -> {}", str, onsHostName);
+							
+							logger.info("Server starts to lookup...");
+							try{
+								domainName = onsHostName;
+								lookupResult = naptrLookup.getResource(domainName);
+								logger.info("Lookup result is : {}",lookupResult);
+							}catch(NullPointerException e){
+								logger.info("Lookup failed");
+								e.printStackTrace();
+							}
+							
 						}catch(TDTException e){
 							e.printStackTrace();
 							logger.info("Translation failed. Input value '{}' is wrong.",str);
 						}
 					
-						logger.info("Server starts to lookup...");
-						try{
-							domainName = onsHostName;
-							lookupResult = naptrLookup.getResource(domainName);
-							logger.info("Lookup result is : {}",lookupResult);
-						}catch(NullPointerException e){
-							logger.info("Lookup failed");
-							e.printStackTrace();
-						}
+						
 						//<-- here, Translate it with JSON and send JSON value to client
 						
 						//<JSON USAGE>	
