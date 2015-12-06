@@ -27,6 +27,8 @@ import main.ons.JsonBuilder;
 
 import main.ons.NaptrLookup;
 
+import org.fosstrak.tdt.TDTException;
+
 public class ServerMain{
 	private final static Logger logger = LoggerFactory.getLogger(ServerMain.class);
 	private final static int PORT_NUM = 7777;
@@ -47,6 +49,9 @@ public class ServerMain{
 		private JsonBuilder jsonObject=null;
 		private String lookupResult;
 		private TagTranslator tagTranslator;
+		
+		private String onsHostName;
+		private String epcTagURI;
 		public void run(){
 			try{
 				logger.info("Server: Openning...");
@@ -65,11 +70,15 @@ public class ServerMain{
 						
 						logger.info("Server : Received '{}' from client",str);
 						
-						String epcTagURI = tagTranslator.elementStringToEpcTagURI(str);
-						String onsHostName = tagTranslator.epcTagUriToOnsHostname(epcTagURI);
-						
-						logger.info("Translation success: {} -> {}", str, onsHostName);
-						
+						try{
+							epcTagURI = tagTranslator.elementStringToEpcTagURI(str);
+							onsHostName = tagTranslator.epcTagUriToOnsHostname(epcTagURI);
+							logger.info("Translation success: {} -> {}", str, onsHostName);
+						}catch(TDTException e){
+							e.printStackTrace();
+							logger.info("Translation failed. Input value '{}' is wrong.",str);
+						}
+					
 						logger.info("Server starts to lookup...");
 						try{
 							domainName = onsHostName;
