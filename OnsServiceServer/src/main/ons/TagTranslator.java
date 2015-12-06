@@ -49,7 +49,6 @@ public class TagTranslator extends TestCase{
 	}
 	******/
 
-	@SuppressWarnings("deprecation")
 	protected void setUp() {
 		params = new HashMap<String,String>();
 		
@@ -62,7 +61,7 @@ public class TagTranslator extends TestCase{
 			try {
 				String s = System.getenv("ONSClient_PATH");
 				if (s == null) s = "/bin/";
-				engine = new TDTEngine(s);
+				engine = new TDTEngine();
 			}
 			catch (Exception e) {
 				e.printStackTrace(System.err);
