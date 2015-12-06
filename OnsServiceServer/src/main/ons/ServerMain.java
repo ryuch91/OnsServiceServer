@@ -46,12 +46,14 @@ public class ServerMain{
 		private NaptrLookup naptrLookup;
 		private JsonBuilder jsonObject=null;
 		private String lookupResult;
+		private TagTranslator tagTranslator;
 		public void run(){
 			try{
 				logger.info("Server: Openning...");
 				serverSocket = new ServerSocket(PORT_NUM);
 				naptrLookup = new NaptrLookup();
 				jsonObject = new JsonBuilder();
+				tagTranslator = new TagTranslator();
 				
 				while(true){
 					Socket client = serverSocket.accept();
@@ -60,11 +62,17 @@ public class ServerMain{
 					try{
 						BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 						String str = in.readLine();
+						
 						logger.info("Server : Received '{}' from client",str);
+						
+						String epcTagURI = tagTranslator.elementStringToEpcTagURI(str);
+						String onsHostName = tagTranslator.epcTagUriToOnsHostname(epcTagURI);
+						
+						logger.info("Translation success: {} -> {}", str, onsHostName);
 						
 						logger.info("Server starts to lookup...");
 						try{
-							domainName = "0.4.2.0.0.0.1.0.0.0.0.8.8.gtin.gs1.id.onsepc.kr";
+							domainName = onsHostName;
 							lookupResult = naptrLookup.getResource(domainName);
 							logger.info("Lookup result is : {}",lookupResult);
 						}catch(NullPointerException e){
