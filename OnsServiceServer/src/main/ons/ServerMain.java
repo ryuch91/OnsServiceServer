@@ -19,6 +19,7 @@ import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.net.UnknownHostException;
+import java.util.StringTokenizer;
 import java.net.SocketException;
 
 import org.json.simple.JSONObject;
@@ -46,7 +47,7 @@ public class ServerMain{
 		private String domainName=null;
 		private ServerSocket serverSocket;
 		private NaptrLookup naptrLookup;
-		private JsonBuilder jsonObject=null;
+		private JsonBuilder jsonBuilder=null;
 		private String lookupResult;
 		private TagTranslator tagTranslator;
 		
@@ -58,7 +59,7 @@ public class ServerMain{
 				logger.info("Server: Openning...");
 				serverSocket = new ServerSocket(PORT_NUM);
 				naptrLookup = new NaptrLookup();
-				jsonObject = new JsonBuilder();
+				jsonBuilder = new JsonBuilder();
 				tagTranslator = new TagTranslator();
 				
 				while(true){
@@ -94,7 +95,13 @@ public class ServerMain{
 							logger.info("Translation failed. Input value '{}' is wrong.",str);
 						}
 					
-						
+						//JSON building part
+						int tokenCounter = 1;
+						StringTokenizer strToken = new StringTokenizer(lookupResult," ");
+						while(strToken.hasMoreTokens()){
+							jsonBuilder.addJson("service"+Integer.toString(tokenCounter),strToken.nextToken());
+							tokenCounter++;
+						}
 						//<-- here, Translate it with JSON and send JSON value to client
 						
 						//<JSON USAGE>	
@@ -104,12 +111,13 @@ public class ServerMain{
 						//String strJson = jsonObject.jsonToString();
 						
 						PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())),true);
-						out.println("Lookup Result:"+lookupResult);
+						out.println("Lookup Result:"+jsonBuilder.jsonToString());
 					}catch(Exception e){
 						logger.info("Stream open error");
 						e.printStackTrace();
 					}finally{
 						client.close();
+						jsonBuilder.initializeHash();
 						logger.info("Server: Done");
 					}
 				}

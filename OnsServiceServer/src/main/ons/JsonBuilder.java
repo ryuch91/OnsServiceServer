@@ -37,4 +37,12 @@ public class JsonBuilder{
 		str = jsonObj.get(key).toString();
 		return str;
 	}
+	
+	public void initializeHash(){
+		try{
+			jsonObj.clear();
+		}catch(UnsupportedOperationException e){
+			e.printStackTrace();
+		}
+	}
 }
