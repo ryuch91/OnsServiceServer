@@ -104,7 +104,7 @@ public class ServerMain{
 						//String strJson = jsonObject.jsonToString();
 						
 						PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())),true);
-						out.println("Server received "+str+"\n"+"Lookup Result:"+lookupResult);
+						out.println("Lookup Result:"+lookupResult);
 					}catch(Exception e){
 						logger.info("Stream open error");
 						e.printStackTrace();
