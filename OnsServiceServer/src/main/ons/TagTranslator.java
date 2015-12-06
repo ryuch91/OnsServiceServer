@@ -3,6 +3,7 @@ package main.ons;
 import java.io.IOException;
 
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.HashMap;
 
 import org.epcglobalinc.tdt.LevelTypeList;
@@ -126,6 +127,52 @@ public class TagTranslator extends TestCase{
 		
 		System.out.println("Convert result : "+ s);
 		return s;
+	}
+	
+	public String arrangeOnsHostname(String onsHostname){
+		String resultStr = null;
+		String itemref = null;
+		String companyPrefix = null;
+		String gs1Code = null;
+		int count = 0;
+		
+		StringTokenizer str = new StringTokenizer(onsHostname, ".");
+		
+		while(str.hasMoreTokens()){
+			switch(count){
+			case 0:
+				String first = str.nextToken().substring(0,1);
+				String last = str.nextToken().substring(1,str.nextToken().length());
+				itemref = first + reverseString(last);
+				break;
+			case 1:
+				companyPrefix = reverseString(str.nextToken());
+				break;
+			case 2:
+				if(str.nextToken().equals("sgtin")){
+					gs1Code = "gtin.gs1.id.onsepc.kr";
+				}else{
+					gs1Code = str.nextToken() + ".gs1.id.onsepc.kr";
+				}
+				break;
+			default:
+				break;
+			}
+			count++;
+		}
+		
+		resultStr = itemref + "." + companyPrefix + "." + gs1Code;
+		return resultStr;
+		
+	}
+	
+	public String reverseString(String str){
+		String result = "";
+		int len = str.length();
+		for(int i=len-1;i>=0;i--){
+			result = result + str.charAt(i);
+		}
+		return result;
 	}
 	
 	//------------------------------------------------------------------------

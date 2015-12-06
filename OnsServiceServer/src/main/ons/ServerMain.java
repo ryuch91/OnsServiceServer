@@ -51,6 +51,7 @@ public class ServerMain{
 		private TagTranslator tagTranslator;
 		
 		private String onsHostName;
+		private String onsHostNameArranged;
 		private String epcTagURI;
 		public void run(){
 			try{
@@ -73,11 +74,12 @@ public class ServerMain{
 						try{
 							epcTagURI = tagTranslator.elementStringToEpcTagURI(str);
 							onsHostName = tagTranslator.epcTagUriToOnsHostname(epcTagURI);
-							logger.info("Translation success: {} -> {}", str, onsHostName);
+							onsHostNameArranged = tagTranslator.arrangeOnsHostname(onsHostName);
+							logger.info("Translation success: {} -> {}", str, onsHostNameArranged);
 							
 							logger.info("Server starts to lookup...");
 							try{
-								domainName = onsHostName;
+								domainName = onsHostNameArranged;
 								lookupResult = naptrLookup.getResource(domainName);
 								logger.info("Lookup result is : {}",lookupResult);
 							}catch(NullPointerException e){
