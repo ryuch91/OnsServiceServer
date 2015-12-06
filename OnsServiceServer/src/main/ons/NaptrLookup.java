@@ -51,15 +51,15 @@ public class NaptrLookup {
 			for(Record record : records){
 				NAPTRRecord naptrRecord = (NAPTRRecord) record;
 				if(naptrRecord.getFlags().contains("U")){
-					nodeName = nodeName + naptrRecord.getService().toString() + " ";
+					if(nodeName == null){
+						nodeName = naptrRecord.getService().toString();
+					}else{
+						nodeName = nodeName + " " + naptrRecord.getService().toString();
+					}
 					String resource = naptrRecord.getRegexp();
 					System.out.println("Candidate node: " + nodeName);
 					System.out.println("Regexp : "+ resource);
 				}
-			}
-			
-			if(nodeName.endsWith(" ")){
-				nodeName = nodeName.substring(0, nodeName.length()-2);
 			}
 		}
 		else{
