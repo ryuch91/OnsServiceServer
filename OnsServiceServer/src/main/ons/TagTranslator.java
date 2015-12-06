@@ -163,7 +163,7 @@ public class TagTranslator extends TestCase{
 			count++;
 		}
 		
-		resultStr = itemref + "." + companyPrefix + "." + gs1Code;
+		resultStr = addDotToString(itemref) + "." + addDotToString(companyPrefix) + "." + gs1Code;
 		return resultStr;
 		
 	}
@@ -174,6 +174,16 @@ public class TagTranslator extends TestCase{
 		for(int i=len-1;i>=0;i--){
 			result = result + str.charAt(i);
 		}
+		return result;
+	}
+	
+	public String addDotToString(String str){
+		String result = "";
+		int len = str.length();
+		for(int i=0;i<len-1;i++){
+			result = str.charAt(i) + ".";
+		}
+		result = result + str.charAt(len-1);
 		return result;
 	}
 	
