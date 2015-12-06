@@ -68,6 +68,8 @@ public class ServerMain{
 					try{
 						BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 						String str = in.readLine();
+						//Test String : (01)0 8800001 00024 3 (21)001
+						//String str = "010880000100024321001";
 						
 						logger.info("Server : Received '{}' from client",str);
 						
