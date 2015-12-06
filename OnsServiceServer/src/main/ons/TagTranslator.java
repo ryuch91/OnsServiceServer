@@ -181,7 +181,7 @@ public class TagTranslator extends TestCase{
 		String result = "";
 		int len = str.length();
 		for(int i=0;i<len-1;i++){
-			result = str.charAt(i) + ".";
+			result = result + str.charAt(i) + ".";
 		}
 		result = result + str.charAt(len-1);
 		return result;
