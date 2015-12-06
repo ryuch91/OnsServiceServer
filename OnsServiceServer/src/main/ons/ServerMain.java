@@ -82,7 +82,7 @@ public class ServerMain{
 							logger.info("Server starts to lookup...");
 							try{
 								domainName = onsHostNameArranged;
-								lookupResult = naptrLookup.getResource(domainName);
+								lookupResult = naptrLookup.getNode(domainName);
 								logger.info("Lookup result is : {}",lookupResult);
 							}catch(NullPointerException e){
 								logger.info("Lookup failed");
