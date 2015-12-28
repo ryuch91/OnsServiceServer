@@ -11,4 +11,5 @@ tdt-1.0.0-with-dependencies.jar, json-simple-1.1.1.jar
 
 # Usage Example
 javac ServerMain.java
+
 java ServerMain
